@@ -9,10 +9,8 @@ module.exports.createUser = async serviceData => {
     if (user) {
       throw new Error('Email already exists')
     }
-
     const hashPassword = await bcrypt.hash(serviceData.password, 12)
-
-    const newUser = new User({
+    const newUser = await new User({
       email: serviceData.email,
       password: hashPassword,
       firstName: serviceData.firstName,
@@ -20,9 +18,8 @@ module.exports.createUser = async serviceData => {
       userName: serviceData.userName
     })
     console.log(newUser)
-    let result = await newUser.save()
-
-    return result
+    user.password = undefined
+    return user
   } catch (error) {
     console.error('Error in userService.js', error)
     throw new Error(error)
@@ -34,7 +31,6 @@ module.exports.getUserProfile = async serviceData => {
     const jwtToken = serviceData.headers.authorization.split('Bearer')[1].trim()
     const decodedJwtToken = jwt.decode(jwtToken)
     const user = await User.findOne({ _id: decodedJwtToken.id })
-
     if (!user) {
       throw new Error('User not found!')
     }
@@ -50,13 +46,12 @@ module.exports.loginUser = async serviceData => {
   try {
     const user = await User.findOne({ email: serviceData.email }, '+password')
     if (!user) {
-      return res.status(400).json({ message: 'User not found' })
+      throw new Error('User not found')
     }
     const validPassword = await bcrypt.compare(serviceData.password, user.password)
     if (!validPassword) {
-      return res.status(400).json({ message: 'Password is not invalid' })
+      throw new Error('Invalid password')
     }
-
     const token = jwt.sign(
       { id: user._id },
       process.env.SECRET_KEY || 'default-secret-key',
