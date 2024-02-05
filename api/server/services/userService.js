@@ -19,7 +19,7 @@ module.exports.createUser = async serviceData => {
       lastName: serviceData.lastName,
       userName: serviceData.userName
     })
-  console.log(newUser)
+    console.log(newUser)
     let result = await newUser.save()
 
     return result
@@ -38,8 +38,8 @@ module.exports.getUserProfile = async serviceData => {
     if (!user) {
       throw new Error('User not found!')
     }
-
-    return user.toObject()
+    user.password = undefined
+    return user
   } catch (error) {
     console.error('Error in userService.js', error)
     throw new Error(error)
@@ -48,16 +48,13 @@ module.exports.getUserProfile = async serviceData => {
 
 module.exports.loginUser = async serviceData => {
   try {
-    const user = await User.findOne({ email: serviceData.email })
-
+    const user = await User.findOne({ email: serviceData.email }, '+password')
     if (!user) {
-      throw new Error('User not found!')
+      return res.status(400).json({ message: 'User not found' })
     }
-
-    const isValid = await bcrypt.compare(serviceData.password, user.password)
-
-    if (!isValid) {
-      throw new Error('Password is invalid')
+    const validPassword = await bcrypt.compare(serviceData.password, user.password)
+    if (!validPassword) {
+      return res.status(400).json({ message: 'Password is not invalid' })
     }
 
     const token = jwt.sign(
@@ -65,7 +62,7 @@ module.exports.loginUser = async serviceData => {
       process.env.SECRET_KEY || 'default-secret-key',
       { expiresIn: '1d' }
     )
-
+    user.password = undefined
     return { token }
   } catch (error) {
     console.error('Error in userService.js', error)
@@ -84,12 +81,11 @@ module.exports.updateUserProfile = async serviceData => {
       },
       { new: true }
     )
-
     if (!user) {
       throw new Error('User not found!')
     }
-
-    return user.toObject()
+    user.password = undefined
+    return user
   } catch (error) {
     console.error('Error in userService.js', error)
     throw new Error(error)
