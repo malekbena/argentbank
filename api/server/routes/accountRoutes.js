@@ -8,5 +8,10 @@ router.post(
     tokenValidation.validateToken,
     accountController.createAccount
 )
-    
+
+router.post(
+    '/accounts',
+    tokenValidation.validateToken,
+    accountController.getAccount
+)
 module.exports = router

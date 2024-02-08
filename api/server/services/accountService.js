@@ -23,3 +23,19 @@ module.exports.createAccount = async serviceData => {
         throw new Error(error)
     }
 }
+
+module.exports.getAccounts = async serviceData => {
+    try {
+        const jwtToken = serviceData.headers.authorization.split('Bearer')[1].trim()
+        const decodedJwtToken = jwt.decode(jwtToken)
+        const user = await User.findOne({ _id: decodedJwtToken.id })
+        if (!user) {
+            throw new Error(error)
+        }
+        let result = await Account.find({ userId: user._id })
+        return result
+    } catch (error) {
+        console.log('Error in accountService.js', error)
+        throw new Error(error)
+    }
+}
