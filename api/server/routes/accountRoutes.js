@@ -14,4 +14,10 @@ router.post(
     tokenValidation.validateToken,
     accountController.getAccount
 )
+
+router.put(
+    '/update',
+    tokenValidation.validateToken,
+    accountController.updateAccount
+)
 module.exports = router

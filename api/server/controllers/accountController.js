@@ -19,3 +19,13 @@ module.exports.getAccount = async (req, res) => {
         return res.status(400).json({message: error.message})
     }
 }
+
+module.exports.updateAccount = async (req, res) => {
+    try {
+        const responseFromService = await accountService.updateAccount(req)
+        return res.status(200).json({message: 'Account successfully updated', body: responseFromService})
+    } catch (error) {
+        console.error('Something went wrong in accountController.js', error)
+        return res.status(400).json({message: error.message})
+    }
+}

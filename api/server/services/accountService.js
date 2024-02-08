@@ -8,7 +8,7 @@ module.exports.createAccount = async serviceData => {
         const decodedJwtToken = jwt.decode(jwtToken)
         const user = await User.findOne({ _id: decodedJwtToken.id })
         if (!user) {
-            throw new Error(error)
+            throw new Error('User not found')
         }
         const newAccount = new Account({
             userId: user._id,
@@ -30,12 +30,42 @@ module.exports.getAccounts = async serviceData => {
         const decodedJwtToken = jwt.decode(jwtToken)
         const user = await User.findOne({ _id: decodedJwtToken.id })
         if (!user) {
-            throw new Error(error)
+            throw new Error('User not found')
         }
         let result = await Account.find({ userId: user._id })
         return result
     } catch (error) {
         console.log('Error in accountService.js', error)
+        throw new Error(error)
+    }
+}
+
+module.exports.updateAccount = async serviceData => {
+    try {
+        const jwtToken = serviceData.headers.authorization.split('Bearer')[1].trim()
+        const decodedJwtToken = jwt.decode(jwtToken)
+        const user = await User.findOne({ _id: decodedJwtToken.id })
+        if (!user) {
+            throw new Error('User not found')
+        }
+        const account = await Account.findOne({ _id: serviceData.body.accountId })
+        if (!account) {
+            throw new Error('Account not found')
+        }
+        if (account.userId.toString() !== user._id.toString()) {
+            throw new Error('Unauthorized')
+        }
+
+        const accountUpdated = await Account.findOneAndUpdate(
+            { _id: serviceData.body.accountId },
+            {
+                accountName: serviceData.body.accountName
+            },
+            { new: true }
+        )
+        return accountUpdated
+    } catch (error) {
+        console.error('Error in accountService.js', error)
         throw new Error(error)
     }
 }
