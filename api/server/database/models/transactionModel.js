@@ -36,10 +36,6 @@ const transactionSchema = new mongoose.Schema(
         note: {
             type: String,
             required: false
-        },
-        account: {
-            type: String,
-            required: true
         }
     },
     {

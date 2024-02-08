@@ -13,7 +13,7 @@ router.post(
   userController.getUserProfile
 )
 
-router.put(
+router.patch(
   '/profile',
   tokenValidation.validateToken,
   userController.updateUserProfile

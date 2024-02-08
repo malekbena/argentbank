@@ -15,7 +15,7 @@ router.post(
     accountController.getAccount
 )
 
-router.put(
+router.patch(
     '/update',
     tokenValidation.validateToken,
     accountController.updateAccount
