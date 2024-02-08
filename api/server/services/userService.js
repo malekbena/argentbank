@@ -3,23 +3,23 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
 module.exports.createUser = async serviceData => {
-  console.log(serviceData)
   try {
     const user = await User.findOne({ email: serviceData.email })
     if (user) {
       throw new Error('Email already exists')
     }
     const hashPassword = await bcrypt.hash(serviceData.password, 12)
-    const newUser = await new User({
+    const newUser = new User({
       email: serviceData.email,
       password: hashPassword,
       firstName: serviceData.firstName,
       lastName: serviceData.lastName,
       userName: serviceData.userName
     })
-    console.log(newUser)
-    user.password = undefined
-    return user
+    let result = await newUser.save()
+    result.password = undefined
+    console.log(result)
+    return result
   } catch (error) {
     console.error('Error in userService.js', error)
     throw new Error(error)
