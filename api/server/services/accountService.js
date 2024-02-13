@@ -1,6 +1,4 @@
 const Account = require('../database/models/accountModel')
-const User = require('../database/models/userModel')
-const jwt = require('jsonwebtoken')
 
 module.exports.createAccount = async serviceData => {
     try {

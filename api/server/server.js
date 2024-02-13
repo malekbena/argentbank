@@ -24,6 +24,7 @@ app.use(express.urlencoded({ extended: true }))
 // Handle custom routes
 app.use('/api/v1/user', require('./routes/userRoutes'))
 app.use('/api/v1/account', require('./routes/accountRoutes'))
+app.use('/api/v1/transaction', require('./routes/transactionRoutes'))
 
 // API Documentation
 if (process.env.NODE_ENV !== 'production') {
