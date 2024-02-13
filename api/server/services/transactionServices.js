@@ -39,6 +39,9 @@ module.exports.updateTransaction = async serviceData => {
         if (transaction.userId.toString() !== serviceData.user._id.toString()) {
             throw new Error('Unauthorized')
         }
+        if (transaction.accountId.toString() !== serviceData.body.accountId.toString()) {
+            throw new Error('Unauthorized')
+        }
         const transactionUpdated = await Transaction.findOneAndUpdate(
             { _id: serviceData.body.transactionId },
             {
