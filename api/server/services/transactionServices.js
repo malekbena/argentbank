@@ -58,7 +58,10 @@ module.exports.createTransaction = async serviceData => {
 
 module.exports.getTransactions = async serviceData => {
     try {
-        let result = await Transaction.find({ userId: serviceData.user._id })
+        let result = await Transaction.find({ accountId: serviceData.body.accountId }, null, { sort: { createdAt: -1 } })
+        if (!result) {
+            throw new Error('No transactions found')
+        }
         return result
     } catch (error) {
         console.log('Error in transactionService.js', error)
