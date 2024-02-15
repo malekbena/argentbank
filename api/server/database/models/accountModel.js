@@ -17,8 +17,9 @@ const accountSchema = new mongoose.Schema(
             required: true
         },
         balance: {
-            type: mongoose.Types.Decimal128,
-            required: true
+            type: Number,
+            required: true,
+            set: value => Math.round(value * 100) / 100
         },
         description: {
             type: String,

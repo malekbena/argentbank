@@ -70,7 +70,7 @@ const User = () => {
       <h2 className="sr-only">Accounts</h2>
       {
         user.accounts && user.accounts.map((account, index) => {
-          let formattedBalance = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(account.balance.$numberDecimal)
+          let formattedBalance = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(account.balance)
           return <AccountItem key={index} title={`Argent Bank ${account.accountType}`} amount={formattedBalance} description={account.description} />
         })
       }

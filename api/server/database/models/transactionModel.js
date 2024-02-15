@@ -13,8 +13,8 @@ const transactionSchema = new mongoose.Schema(
             required: true
         },
         amount: {
-            type: mongoose.Types.Decimal128,
-            required: true
+            type: Number,
+            required: true,
         },
         description: {
             type: String,
@@ -39,7 +39,7 @@ const transactionSchema = new mongoose.Schema(
             required: true
         },
         accountBalance: {
-            type: mongoose.Types.Decimal128,
+            type: Number,
             required: true
         }
     },

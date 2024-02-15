@@ -10,32 +10,35 @@ module.exports.createTransaction = async serviceData => {
         if (account.userId.toString() !== serviceData.user._id.toString()) {
             throw new Error('Unauthorized')
         }
+
+        if (serviceData.body.amount.toString().split('.')[1] && serviceData.body.amount.toString().split('.')[1].length > 2) {
+            throw new Error('Amount should have less than 2 decimal places')
+        }
+
         let newBalance = 0
         if (serviceData.body.operation === 'Expense') {
-            if (parseFloat(account.balance) < parseFloat(serviceData.body.amount)) {
+            if (account.balance < serviceData.body.amount) {
                 throw new Error('Insufficient balance')
             }
-            let res = parseFloat(account.balance) - parseFloat(serviceData.body.amount)
             const accountUpdated = await Account.findOneAndUpdate(
                 { _id: serviceData.body.accountId },
                 {
-                    balance: res.toFixed(2)
+                    $inc: { balance: -serviceData.body.amount }
                 },
                 { new: true }
             )
             newBalance = accountUpdated.balance
         }
         if (serviceData.body.operation === 'Income') {
-            let res = parseFloat(account.balance) + parseFloat(serviceData.body.amount)
             const accountUpdated = await Account.findOneAndUpdate(
                 { _id: serviceData.body.accountId },
                 {
-                    balance: res.toFixed(2) 
+                    $inc: { balance: serviceData.body.amount }
                 },
                 { new: true }
             )
             newBalance = accountUpdated.balance
-            
+
         }
         const newTransaction = new Transaction({
             userId: serviceData.user._id,
@@ -58,10 +61,13 @@ module.exports.createTransaction = async serviceData => {
 
 module.exports.getTransactions = async serviceData => {
     try {
-        let result = await Transaction.find({ accountId: serviceData.body.accountId }, null, { sort: { createdAt: -1 } })
-        if (!result) {
-            throw new Error('No transactions found')
-        }
+        const dateBeg = new Date(new Date().getFullYear(), new Date().getMonth(), 1, 0, 0, 0)
+        const dateEnd = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0, 23, 59, 59)
+
+        let result = await Transaction.find({
+            accountId: serviceData.body.accountId,
+            createdAt: { $gte: dateBeg, $lt: dateEnd }
+        }).sort({ createdAt: -1 })
         return result
     } catch (error) {
         console.log('Error in transactionService.js', error)
