@@ -20,6 +20,11 @@ const accountSchema = new mongoose.Schema(
             type: mongoose.Types.Decimal128,
             required: true
         },
+        description: {
+            type: String,
+            enum: ['Available Balance', 'Current Balance'],
+            required: true
+        }
     }
 )
 
