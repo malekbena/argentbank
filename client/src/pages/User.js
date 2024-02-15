@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { userEdit, getAccounts } from "../redux/userSlice"
+import { userEdit } from "../redux/userSlice"
 import Button from "../components/Button"
 import AccountItem from "../components/AccountItem"
 

@@ -17,7 +17,7 @@ const accountSchema = new mongoose.Schema(
             required: true
         },
         balance: {
-            type: Number,
+            type: mongoose.Types.Decimal128,
             required: true
         },
     }
