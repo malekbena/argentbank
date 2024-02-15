@@ -42,10 +42,23 @@ export const userEdit = createAsyncThunk(
     }
 )
 
+export const getAccounts = createAsyncThunk(
+    'user/getAccounts',
+    async (token) => {
+        const response = await Axios.post('http://localhost:3001/api/v1/account/accounts', {}, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        return response.data.body
+    }
+)
+
 const initialState = {
     token: checkToken() ? localStorage.getItem('token') : null,
     isLogged: checkToken(),
-    profile: {}
+    profile: {},
+    accounts: []
 }
 
 const userSlice = createSlice({
@@ -56,6 +69,7 @@ const userSlice = createSlice({
             state.token = null
             state.isLogged = false
             state.profile = {}
+            state.accounts = []
             localStorage.removeItem('token')
         }
         
@@ -81,6 +95,13 @@ const userSlice = createSlice({
             state.profile = action.payload
         })
         builder.addCase(userEdit.rejected, (state, action) => {
+            console.log(action.error.message)
+        })
+        builder.addCase(getAccounts.fulfilled, (state, action) => {
+            state.accounts = action.payload
+        })
+        builder.addCase(getAccounts.rejected, (state, action) => {
+            state.accounts = []
             console.log(action.error.message)
         })
     }

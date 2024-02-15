@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
-import userSlice, {userLogin, getProfile}  from './userSlice'
+import userSlice, {userLogin, getProfile, getAccounts}  from './userSlice'
 
 const store = configureStore({
   reducer: {
@@ -9,8 +9,9 @@ const store = configureStore({
     {
       serializableCheck: false
     },
-    userLogin, getProfile
+    userLogin, getProfile, getAccounts
   )
 })
+
 
 export default store

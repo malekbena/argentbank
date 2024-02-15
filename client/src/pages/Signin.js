@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { userLogin, getProfile } from '../redux/userSlice'
+import { userLogin, getProfile, getAccounts } from '../redux/userSlice'
 import { useNavigate } from 'react-router-dom'
 import Button from '../components/Button'
 
@@ -18,6 +18,7 @@ const Signin = () => {
         }
         dispatch(userLogin(user)).then((res) => {
             if (res.payload) {
+                dispatch(getAccounts(res.payload.token))
                 dispatch(getProfile(res.payload.token)).then((res) => {
                     if (res.payload) {
                         navigate('/user')

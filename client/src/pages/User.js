@@ -1,6 +1,6 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { userEdit } from "../redux/userSlice"
+import { userEdit, getAccounts } from "../redux/userSlice"
 import Button from "../components/Button"
 import AccountItem from "../components/AccountItem"
 
@@ -10,7 +10,6 @@ const User = () => {
   
   const user = useSelector(state => state.user)
   const dispatch = useDispatch()
-
 
   const showEdit = (e) => {
     e.preventDefault()
@@ -72,6 +71,11 @@ const User = () => {
       <AccountItem title={'Argent Bank Checking (x8349)'} amount={'$2,082.79'} description={'Available Balance'} />
       <AccountItem title={'Argent Bank Savings (x6712)'} amount={'$10,928.42'} description={'Available Balance'} />
       <AccountItem title={'Argent Bank Credit Card (x8349)'} amount={'$184.30'} description={'Current Balance'} />
+      {
+        user.accounts && user.accounts.map((account, index) => {
+          return <AccountItem key={index} title={`Argent Bank ${account.accountType}`} amount={`$${account.balance}`} description={account.description} />
+        })
+      }
     </main>
   )
 }
