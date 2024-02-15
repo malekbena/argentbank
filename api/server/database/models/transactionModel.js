@@ -29,10 +29,6 @@ const transactionSchema = new mongoose.Schema(
             enum: ['Food', 'Transport', 'Shopping', 'Bills', 'Others'],
             required: true,
         },
-        date: {
-            type: Date,
-            required: true
-        },
         note: {
             type: String,
             required: false
@@ -40,6 +36,10 @@ const transactionSchema = new mongoose.Schema(
         operation: {
             type: String,
             enum: ['Expense', 'Income'],
+            required: true
+        },
+        accountBalance: {
+            type: mongoose.Types.Decimal128,
             required: true
         }
     },
