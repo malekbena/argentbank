@@ -10,7 +10,8 @@ module.exports.createTransaction = async serviceData => {
             type: serviceData.body.type,
             category: serviceData.body.category,
             date: serviceData.body.date,
-            note: serviceData.body.note
+            note: serviceData.body.note,
+            operation: serviceData.body.operation
         })
         let result = await newTransaction.save()
         return result

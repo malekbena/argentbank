@@ -36,6 +36,11 @@ const transactionSchema = new mongoose.Schema(
         note: {
             type: String,
             required: false
+        },
+        operation: {
+            type: String,
+            enum: ['Deposit', 'Withdrawal'],
+            required: true
         }
     },
     {
