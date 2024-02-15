@@ -6,7 +6,8 @@ module.exports.createAccount = async serviceData => {
             userId: serviceData.user._id,
             accountName: serviceData.body.accountName,
             accountType: serviceData.body.accountType,
-            balance: serviceData.body.balance
+            balance: serviceData.body.balance,
+            description: serviceData.body.description
         })
         let result = await newAccount.save()
         return result
