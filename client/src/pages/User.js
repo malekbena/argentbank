@@ -70,7 +70,7 @@ const User = () => {
       <h2 className="sr-only">Accounts</h2>
       {
         user.accounts && user.accounts.map((account, index) => {
-          return <AccountItem key={index} account={account} token={user.token} />
+          return <AccountItem key={index} account={account} />
         })
       }
     </main>

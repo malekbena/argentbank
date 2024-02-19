@@ -3,11 +3,13 @@ import axios from 'axios'
 import Button from './Button'
 import TransactionItem from './TransactionItem';
 import { formatAmount } from '../utils';
+import { useSelector } from 'react-redux';
 
 
-const AccountItem = ({ account, token }) => {
+const AccountItem = ({ account }) => {
     const [transactions, setTransactions] = useState([])
     const [isTransaction, setIsTransaction] = useState(false)
+    const user = useSelector(state => state.user)
 
     useEffect(() => {
         axios.post('http://localhost:3001/api/v1/transaction/transactions',
@@ -15,13 +17,13 @@ const AccountItem = ({ account, token }) => {
             {
                 headers: {
                     contentType: 'application/json',
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${user.token}`
                 }
             }
         ).then((res) => {
             setTransactions(res.data.body)
         })
-    }, [account, token])
+    }, [account, user.token])
 
     const showTransactions = (e) => {
         e.preventDefault()

@@ -90,8 +90,8 @@ module.exports.updateTransaction = async serviceData => {
         const transactionUpdated = await Transaction.findOneAndUpdate(
             { _id: serviceData.body.transactionId },
             {
-                category: serviceData.body.category,
-                note: serviceData.body.note
+                category: serviceData.body.category ? serviceData.body.category : transaction.category,
+                note: serviceData.body.note ? serviceData.body.note : transaction.note
             },
             { new: true }
         )
