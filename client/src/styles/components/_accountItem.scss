@@ -12,7 +12,8 @@
     text-align: left;
     margin-bottom: 2rem;
 }
-.account-card-header{
+
+.account-card-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -45,21 +46,48 @@
 .transactions {
     width: 100%;
 }
+
 .transactions-header {
     padding-left: 1rem;
-    
-}
-.transaction{
-    background-color: #00bc77;
-    color: #fff;   
-    width: 100%;
-    padding-left: 1rem;
+
+    p {
+        padding-left: 0.5rem;
+    }
 
 }
-.grid-template{
+
+.transaction {
+    background-color: #00bc77;
+    color: #fff;
+    width: 100%;
+    padding-left: 1rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
+
+}
+
+.grid-template {
     display: grid;
-    grid-template-columns: 0.5fr 2fr 0.5fr 0.5fr;
+    grid-template-columns: 1fr 2fr 1fr 1fr 0.5fr;
     margin-bottom: 1rem;
+}
+
+.transaction-open-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    color: #fff;
+    background-color: #00bc77;
+    border: none;
+    cursor: pointer;
+}
+
+.transaction-icon {
+    color: #fff;
+    background-color: #00bc77;
+    border: none;
+    cursor: pointer;
 }
 
 @media (min-width: 720px) {

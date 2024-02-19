@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronDown, faPencil } from '@fortawesome/free-solid-svg-icons'
 import Button from './Button'
 
 const AccountItem = ({ account, token }) => {
@@ -20,10 +22,12 @@ const AccountItem = ({ account, token }) => {
         })
     }, [account, token])
 
-    let formattedBalance = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(account.balance)
+    const formatAmount = (amount) => {
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount)
+    }
 
     const dateFormatted = (date) => {
-        return new Date(date).toLocaleDateString()
+        return new Date(date).toLocaleDateString('fr-FR')
     }
 
     return (
@@ -31,7 +35,7 @@ const AccountItem = ({ account, token }) => {
             <div className='account-card-header'>
                 <div className="account-content-wrapper">
                     <h3 className="account-title"> {`Argent Bank ${account.accountType}`} </h3>
-                    <p className="account-amount"> {formattedBalance} </p>
+                    <p className="account-amount"> {formatAmount(account.balance)} </p>
                     <p className="account-amount-description"> {account.description} </p>
                 </div>
                 <div className="account-content-wrapper cta">
@@ -51,8 +55,31 @@ const AccountItem = ({ account, token }) => {
                             <div key={index} className='transaction grid-template'>
                                 <p>{dateFormatted(transaction.createdAt)}</p>
                                 <p>{transaction.description}</p>
-                                <p>{transaction.amount}</p>
-                                <p>{transaction.accountBalance}</p>
+                                <p>{formatAmount(transaction.amount)}</p>
+                                <p>{formatAmount(transaction.accountBalance)}</p>
+                                <button className='transaction-open-icon'>
+                                    <FontAwesomeIcon icon={faChevronDown} />
+                                </button>
+                                <div className=''>
+                                    <p>Transaction Type</p>
+                                    <p>Category</p>
+                                    <p>Note</p>
+                                </div>
+                                <div>
+                                    <p>{transaction.type}</p>
+                                    <p>
+                                        {transaction.category}
+                                        <button className='transaction-icon'>
+                                            <FontAwesomeIcon icon={faPencil} />
+                                        </button>
+                                    </p>
+                                    <p>
+                                        {transaction.note}
+                                        <button className='transaction-icon'>
+                                            <FontAwesomeIcon icon={faPencil} />
+                                        </button>
+                                    </p>
+                                </div>
                             </div>
                         )
                     })
