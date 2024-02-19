@@ -213,15 +213,23 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-direction: column;
   border: 1px solid black;
   background-color: #fff;
   width: 80%;
   margin: 0 auto;
-  flex-direction: column;
   padding: 1.5rem;
   box-sizing: border-box;
   text-align: left;
   margin-bottom: 2rem;
+}
+
+.account-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 1rem;
 }
 
 .account-amount {
@@ -246,8 +254,16 @@
   flex: 1;
 }
 
+.transactions {
+  width: 80%;
+}
+.transactions thead tr {
+  display: flex;
+  justify-content: space-between;
+}
+
 @media (min-width: 720px) {
-  .account {
+  .account-card-header {
     flex-direction: row;
   }
   .account-content-wrapper.cta {
