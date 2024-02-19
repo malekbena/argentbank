@@ -5,7 +5,14 @@
     padding-left: 1rem;
     border-radius: 0.5rem;
     overflow: hidden;
-
+    margin-bottom: 1rem;
+    p{
+        margin: 0;
+    }
+    &__header{
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
 }
 
 
@@ -25,4 +32,19 @@
     background-color: #00bc77;
     border: none;
     cursor: pointer;
+}
+.transaction-detail{
+    display: grid;
+    grid-template-columns: 1fr 4.5fr;
+    padding-bottom: 1rem;
+    margin-top: 0.5rem;
+    &__column{
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    &__row{
+        display: flex;
+        flex-direction: row;
+    }
 }

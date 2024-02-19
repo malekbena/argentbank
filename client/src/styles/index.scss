@@ -54,10 +54,9 @@ body {
 .grid-template {
     display: grid;
     grid-template-columns: 1fr 2fr 1fr 1fr 0.5fr;
-    margin-bottom: 1rem;
 }
 .active {
-    display: block;
+    display: flex;
 }
 .inactive {
     display: none;

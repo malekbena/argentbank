@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronDown, faPencil } from '@fortawesome/free-solid-svg-icons'
 import Button from './Button'
 import TransactionItem from './TransactionItem';
-import { formatAmount, formatDate } from '../utils';
+import { formatAmount } from '../utils';
 
 
 const AccountItem = ({ account, token }) => {

@@ -256,6 +256,7 @@
 
 .transactions {
   width: 100%;
+  flex-direction: column;
 }
 
 .transactions-header {
@@ -280,6 +281,14 @@
   padding-left: 1rem;
   border-radius: 0.5rem;
   overflow: hidden;
+  margin-bottom: 1rem;
+}
+.transaction p {
+  margin: 0;
+}
+.transaction__header {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
 .transaction-open-icon {
@@ -298,6 +307,21 @@
   background-color: #00bc77;
   border: none;
   cursor: pointer;
+}
+
+.transaction-detail {
+  display: grid;
+  grid-template-columns: 1fr 4.5fr;
+  padding-bottom: 1rem;
+  margin-top: 0.5rem;
+}
+.transaction-detail__column {
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.transaction-detail__row {
+  display: flex;
+  flex-direction: row;
 }
 
 html {
@@ -346,11 +370,10 @@ body {
 .grid-template {
   display: grid;
   grid-template-columns: 1fr 2fr 1fr 1fr 0.5fr;
-  margin-bottom: 1rem;
 }
 
 .active {
-  display: block;
+  display: flex;
 }
 
 .inactive {
