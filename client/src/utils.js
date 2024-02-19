@@ -10,3 +10,11 @@ export const checkToken = () => {
     }
     return true
 }
+
+export const formatAmount = (amount) => {
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount)
+}
+
+export const formatDate = (date) => {
+    return new Date(date).toLocaleDateString('fr-FR')
+}

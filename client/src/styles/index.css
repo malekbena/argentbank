@@ -265,6 +265,14 @@
   padding-left: 0.5rem;
 }
 
+@media (min-width: 720px) {
+  .account-card-header {
+    flex-direction: row;
+  }
+  .account-content-wrapper.cta {
+    flex: 0;
+  }
+}
 .transaction {
   background-color: #00bc77;
   color: #fff;
@@ -272,12 +280,6 @@
   padding-left: 1rem;
   border-radius: 0.5rem;
   overflow: hidden;
-}
-
-.grid-template {
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr 1fr 0.5fr;
-  margin-bottom: 1rem;
 }
 
 .transaction-open-icon {
@@ -298,14 +300,6 @@
   cursor: pointer;
 }
 
-@media (min-width: 720px) {
-  .account-card-header {
-    flex-direction: row;
-  }
-  .account-content-wrapper.cta {
-    flex: 0;
-  }
-}
 html {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -347,4 +341,18 @@ body {
   width: 1px !important;
   white-space: nowrap !important;
   /* 3 */
+}
+
+.grid-template {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr 1fr 0.5fr;
+  margin-bottom: 1rem;
+}
+
+.active {
+  display: block;
+}
+
+.inactive {
+  display: none;
 }/*# sourceMappingURL=index.css.map */

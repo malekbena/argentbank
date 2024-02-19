@@ -1,0 +1,28 @@
+.transaction {
+    background-color: #00bc77;
+    color: #fff;
+    width: 100%;
+    padding-left: 1rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
+
+}
+
+
+.transaction-open-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    color: #fff;
+    background-color: #00bc77;
+    border: none;
+    cursor: pointer;
+}
+
+.transaction-icon {
+    color: #fff;
+    background-color: #00bc77;
+    border: none;
+    cursor: pointer;
+}

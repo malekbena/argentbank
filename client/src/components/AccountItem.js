@@ -3,10 +3,13 @@ import axios from 'axios'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown, faPencil } from '@fortawesome/free-solid-svg-icons'
 import Button from './Button'
+import TransactionItem from './TransactionItem';
+import { formatAmount, formatDate } from '../utils';
+
 
 const AccountItem = ({ account, token }) => {
-    const [isOpen, setIsOpen] = useState(false)
     const [transactions, setTransactions] = useState([])
+    const [isTransaction, setIsTransaction] = useState(false)
 
     useEffect(() => {
         axios.post('http://localhost:3001/api/v1/transaction/transactions',
@@ -22,13 +25,11 @@ const AccountItem = ({ account, token }) => {
         })
     }, [account, token])
 
-    const formatAmount = (amount) => {
-        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount)
+    const showTransactions = (e) => {
+        e.preventDefault()
+        setIsTransaction(!isTransaction)
     }
-
-    const dateFormatted = (date) => {
-        return new Date(date).toLocaleDateString('fr-FR')
-    }
+    
 
     return (
         <section className="account">
@@ -39,10 +40,10 @@ const AccountItem = ({ account, token }) => {
                     <p className="account-amount-description"> {account.description} </p>
                 </div>
                 <div className="account-content-wrapper cta">
-                    <Button className={'classic-button transaction-button'} text='View transactions' />
+                    <Button className={'classic-button transaction-button'} text='View transactions' click={e => showTransactions(e)} />
                 </div>
             </div>
-            <div className='transactions'>
+            <div className={`transactions ${isTransaction ? 'active' : 'inactive'}`}>
                 <div className='transactions-header grid-template'>
                     <p>Date</p>
                     <p>Description</p>
@@ -52,35 +53,7 @@ const AccountItem = ({ account, token }) => {
                 {
                     transactions.map((transaction, index) => {
                         return (
-                            <div key={index} className='transaction grid-template'>
-                                <p>{dateFormatted(transaction.createdAt)}</p>
-                                <p>{transaction.description}</p>
-                                <p>{formatAmount(transaction.amount)}</p>
-                                <p>{formatAmount(transaction.accountBalance)}</p>
-                                <button className='transaction-open-icon'>
-                                    <FontAwesomeIcon icon={faChevronDown} />
-                                </button>
-                                <div className=''>
-                                    <p>Transaction Type</p>
-                                    <p>Category</p>
-                                    <p>Note</p>
-                                </div>
-                                <div>
-                                    <p>{transaction.type}</p>
-                                    <p>
-                                        {transaction.category}
-                                        <button className='transaction-icon'>
-                                            <FontAwesomeIcon icon={faPencil} />
-                                        </button>
-                                    </p>
-                                    <p>
-                                        {transaction.note}
-                                        <button className='transaction-icon'>
-                                            <FontAwesomeIcon icon={faPencil} />
-                                        </button>
-                                    </p>
-                                </div>
-                            </div>
+                            <TransactionItem key={index} transaction={transaction} />
                         )
                     })
                 }
