@@ -19,7 +19,10 @@ const accountSchema = new mongoose.Schema(
         balance: {
             type: Number,
             required: true,
-            set: value => Math.round(value * 100) / 100
+            get: v => Math.round(v * 100) / 100,
+            set: v => Math.round(v * 100) / 100
+
+
         },
         description: {
             type: String,
