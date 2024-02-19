@@ -43,13 +43,23 @@
 }
 
 .transactions {
-    width: 80%;
-    thead{
-        tr{
-            display: flex;
-            justify-content: space-between;
-        }
-    }
+    width: 100%;
+}
+.transactions-header {
+    padding-left: 1rem;
+    
+}
+.transaction{
+    background-color: #00bc77;
+    color: #fff;   
+    width: 100%;
+    padding-left: 1rem;
+
+}
+.grid-template{
+    display: grid;
+    grid-template-columns: 0.5fr 2fr 0.5fr 0.5fr;
+    margin-bottom: 1rem;
 }
 
 @media (min-width: 720px) {

@@ -22,6 +22,10 @@ const AccountItem = ({ account, token }) => {
 
     let formattedBalance = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(account.balance)
 
+    const dateFormatted = (date) => {
+        return new Date(date).toLocaleDateString()
+    }
+
     return (
         <section className="account">
             <div className='account-card-header'>
@@ -34,24 +38,26 @@ const AccountItem = ({ account, token }) => {
                     <Button className={'classic-button transaction-button'} text='View transactions' />
                 </div>
             </div>
-            <table className='transactions'>
-                <thead>
-                    <tr>
-                        <th>
-                            Date
-                        </th>
-                        <th>
-                            Description
-                        </th>
-                        <th>
-                            Amount
-                        </th>
-                        <th>
-                            Balance
-                        </th>
-                    </tr>
-                </thead>
-            </table>
+            <div className='transactions'>
+                <div className='transactions-header grid-template'>
+                    <p>Date</p>
+                    <p>Description</p>
+                    <p>Amount</p>
+                    <p>Balance</p>
+                </div>
+                {
+                    transactions.map((transaction, index) => {
+                        return (
+                            <div key={index} className='transaction grid-template'>
+                                <p>{dateFormatted(transaction.createdAt)}</p>
+                                <p>{transaction.description}</p>
+                                <p>{transaction.amount}</p>
+                                <p>{transaction.accountBalance}</p>
+                            </div>
+                        )
+                    })
+                }
+            </div>
         </section>
     );
 }
