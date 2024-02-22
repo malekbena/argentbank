@@ -290,6 +290,12 @@
   padding-top: 1rem;
   padding-bottom: 1rem;
 }
+.transaction__message {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
 
 .transaction-open-icon {
   display: flex;

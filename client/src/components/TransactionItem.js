@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown, faPencil, faCheck, faXmark } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios'
@@ -11,9 +11,18 @@ const TransactionItem = ({ transaction }) => {
     const [editCategory, setEditCategory] = useState(false)
     const [category, setCategory] = useState(transaction.category)
     const [note, setNote] = useState(transaction.note)
+    const [message, setMessage] = useState('')
 
     const categories = ['Food', 'Transport', 'Shopping', 'Bills', 'Others']
     const user = useSelector(state => state.user)
+
+    useEffect(() => {
+        if (message !== '') {
+            setTimeout(() => {
+                setMessage('')
+            }, 3000)
+        }
+    }, [message])
 
     const showDetail = (e) => {
         e.preventDefault()
@@ -56,96 +65,116 @@ const TransactionItem = ({ transaction }) => {
         }
     }
 
-        const sendRequest = (e, data) => {
-            e.preventDefault()
-            axios.patch(`http://localhost:3001/api/v1/transaction/update`, data,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${user.token}`
-                    }
+    const sendRequest = (e, data) => {
+        e.preventDefault()
+        let modifiedField = data.category ? 'category' : 'note'
+
+        axios.patch(`http://localhost:3001/api/v1/transaction/update`, data,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`
                 }
-            ).then((res) => {
-                console.log(res)
-            })
-        }
+            }
+        ).then((res) => {
+            if (res.status === 200) {
+                if (modifiedField === 'category') {
+                    transaction.category = category
+                    setEditCategory(false)
+                    setMessage('Catégorie modifiée avec succès')
+                } else {
+                    transaction.note = note
+                    setEditNote(false)
+                    setMessage('Note modifiée avec succès')
+                }
+            } else {
+                setMessage('Erreur lors de la modification de la transaction')
+                if (modifiedField === 'category') {
+                    closeForm(e, setEditCategory)
+                }else{
+                    closeForm(e, setEditNote)
+                }
+            }
+        })
+    }
 
-        return (
-            <div className='transaction'>
-                <div className='transaction__header grid-template'>
-                    <p>{formatDate(transaction.createdAt)}</p>
-                    <p>{transaction.description}</p>
-                    <p>{formatAmount(transaction.amount)}</p>
-                    <p>{formatAmount(transaction.accountBalance)}</p>
-                    <button className='transaction-open-icon' onClick={e => showDetail(e)}>
-                        <FontAwesomeIcon icon={faChevronDown} />
-                    </button>
+    return (
+        <div className='transaction'>
+            <div className='transaction__header grid-template'>
+                <p>{formatDate(transaction.createdAt)}</p>
+                <p>{transaction.description}</p>
+                <p>{formatAmount(transaction.amount)}</p>
+                <p>{formatAmount(transaction.accountBalance)}</p>
+                <button className='transaction-open-icon' onClick={e => showDetail(e)}>
+                    <FontAwesomeIcon icon={faChevronDown} />
+                </button>
+            </div>
+            {message !== '' && <p className='transaction__message'>{message}</p>}
+            <div className='transaction-detail'>
+                <div className={`transaction-detail__column ${isDetail ? 'active' : 'inactive'}`}>
+                    <p>Transaction Type</p>
+                    <p>Category</p>
+                    <p>Note</p>
                 </div>
-                <div className='transaction-detail'>
-                    <div className={`transaction-detail__column ${isDetail ? 'active' : 'inactive'}`}>
-                        <p>Transaction Type</p>
-                        <p>Category</p>
-                        <p>Note</p>
-                    </div>
-                    <div className={`transaction-detail__column ${isDetail ? 'active' : 'inactive'}`}>
-                        <p>{transaction.type}</p>
-                        <div className='transaction-detail__row'>
-                            {
-                                editCategory ? (
-                                    <>
-                                        <select defaultValue={transaction.category} onChange={e => handleChange(e, setCategory)}>
-                                            {
-                                                categories.map((category, index) => {
-                                                    return (
-                                                        <option key={index} value={category}>{category}</option>
-                                                    )
-                                                })
-                                            }
-                                        </select>
-                                        <button className='transaction-icon' onClick={e => send(e, category)}>
-                                            <FontAwesomeIcon icon={faCheck} />
-                                        </button>
-                                        <button className='transaction-icon' onClick={e => closeForm(e, setEditCategory)}>
-                                            <FontAwesomeIcon icon={faXmark} />
-                                        </button>
-                                    </>
-                                ) : (
-                                    <>
-                                        <p>{transaction.category}</p>
-                                        <button className='transaction-icon' onClick={e => setEditCategory(true)}>
-                                            <FontAwesomeIcon icon={faPencil} />
-                                        </button>
-                                    </>
-                                )
-                            }
+                <div className={`transaction-detail__column ${isDetail ? 'active' : 'inactive'}`}>
+                    <p>{transaction.type}</p>
+                    <div className='transaction-detail__row'>
+                        {
+                            editCategory ? (
+                                <>
+                                    <select defaultValue={transaction.category} onChange={e => handleChange(e, setCategory)}>
+                                        {
+                                            categories.map((category, index) => {
+                                                return (
+                                                    <option key={index} value={category}>{category}</option>
+                                                )
+                                            })
+                                        }
+                                    </select>
+                                    <button className='transaction-icon' onClick={e => send(e, category)}>
+                                        <FontAwesomeIcon icon={faCheck} />
+                                    </button>
+                                    <button className='transaction-icon' onClick={e => closeForm(e, setEditCategory)}>
+                                        <FontAwesomeIcon icon={faXmark} />
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <p>{transaction.category}</p>
+                                    <button className='transaction-icon' onClick={e => setEditCategory(true)}>
+                                        <FontAwesomeIcon icon={faPencil} />
+                                    </button>
+                                </>
+                            )
+                        }
 
-                        </div>
-                        <div className='transaction-detail__row'>
-                            {
-                                editNote ? (
-                                    <>
-                                        <input type="text" defaultValue={transaction.note} onChange={e => handleChange(e, setNote)} />
-                                        <button className='transaction-icon' onClick={e => send(e, note)}>
-                                            <FontAwesomeIcon icon={faCheck} />
-                                        </button>
-                                        <button className='transaction-icon' onClick={e => closeForm(e, setEditNote)}>
-                                            <FontAwesomeIcon icon={faXmark} />
-                                        </button>
-                                    </>
-                                ) : (
-                                    <>
-                                        <p>{transaction.note}</p>
-                                        <button className='transaction-icon' onClick={e => setEditNote(true)}>
-                                            <FontAwesomeIcon icon={faPencil} />
-                                        </button>
-                                    </>
-                                )
-                            }
-                        </div>
+                    </div>
+                    <div className='transaction-detail__row'>
+                        {
+                            editNote ? (
+                                <>
+                                    <input type="text" defaultValue={transaction.note} onChange={e => handleChange(e, setNote)} />
+                                    <button className='transaction-icon' onClick={e => send(e, note)}>
+                                        <FontAwesomeIcon icon={faCheck} />
+                                    </button>
+                                    <button className='transaction-icon' onClick={e => closeForm(e, setEditNote)}>
+                                        <FontAwesomeIcon icon={faXmark} />
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <p>{transaction.note}</p>
+                                    <button className='transaction-icon' onClick={e => setEditNote(true)}>
+                                        <FontAwesomeIcon icon={faPencil} />
+                                    </button>
+                                </>
+                            )
+                        }
                     </div>
                 </div>
             </div>
-        )
-    }
+        </div>
+    )
+}
 
-    export default TransactionItem
+export default TransactionItem
