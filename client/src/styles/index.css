@@ -94,6 +94,10 @@
   font-size: 1.2rem;
 }
 
+.sign-in-error {
+  color: red;
+}
+
 .header {
   color: #fff;
   margin-bottom: 2rem;

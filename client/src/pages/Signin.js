@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { userLogin, getProfile, getAccounts } from '../redux/userSlice'
 import { useNavigate } from 'react-router-dom'
@@ -7,8 +7,15 @@ import Button from '../components/Button'
 const Signin = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const [error, setError] = useState(false)
     const dispatch = useDispatch()
     const navigate = useNavigate()
+
+    useEffect(() => {
+        setTimeout(() => {
+            setError(false)
+        }, 3000)
+    }, [error])
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -24,6 +31,8 @@ const Signin = () => {
                         navigate('/user')
                     }
                 })
+            } else {
+                setError(true)
             }
         })
 
@@ -47,7 +56,14 @@ const Signin = () => {
                         <input type="checkbox" id="remember-me" />
                         <label htmlFor="remember-me">Remember me</label>
                     </div>
-                    <Button className={'classic-button'} click={e=>handleSubmit(e)} text='Sign In' />
+                    {
+                        error && (
+                            <div className='sign-in-error'>
+                                <p>Utilisateur ou mot de passe incorrect</p>
+                            </div>
+                        )
+                    }
+                    <Button className={'classic-button'} click={e => handleSubmit(e)} text='Sign In' />
                 </form>
             </section>
         </main>
