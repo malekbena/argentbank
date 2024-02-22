@@ -29,7 +29,7 @@ const AccountItem = ({ account }) => {
         e.preventDefault()
         setIsTransaction(!isTransaction)
     }
-    
+
 
     return (
         <section className="account">
@@ -40,24 +40,32 @@ const AccountItem = ({ account }) => {
                     <p className="account-amount-description"> {account.description} </p>
                 </div>
                 <div className="account-content-wrapper cta">
-                    <Button className={'classic-button transaction-button'} text='View transactions' click={e => showTransactions(e)} />
+                    <Button className={'classic-button transaction-button'} text={`${isTransaction ? ' Close' : 'View'} transactions`} click={e => showTransactions(e)} />
                 </div>
             </div>
-            <div className={`transactions ${isTransaction ? 'active' : 'inactive'}`}>
-                <div className='transactions-header grid-template'>
-                    <p>Date</p>
-                    <p>Description</p>
-                    <p>Amount</p>
-                    <p>Balance</p>
-                </div>
-                {
-                    transactions.map((transaction, index) => {
-                        return (
-                            <TransactionItem key={index} transaction={transaction} />
-                        )
-                    })
-                }
-            </div>
+            {
+                transactions.length === 0 ? (
+                    <div className={`transactions ${isTransaction ? 'active' : 'inactive'}`}>
+                        <p>No transactions</p>
+                    </div>
+                ) :
+
+                    <div className={`transactions ${isTransaction ? 'active' : 'inactive'}`}>
+                        <div className='transactions-header grid-template'>
+                            <p>Date</p>
+                            <p>Description</p>
+                            <p>Amount</p>
+                            <p>Balance</p>
+                        </div>
+                        {
+                            transactions.map((transaction, index) => {
+                                return (
+                                    <TransactionItem key={index} transaction={transaction} />
+                                )
+                            })
+                        }
+                    </div>
+            }
         </section>
     );
 }
