@@ -12,23 +12,42 @@ const AccountItem = ({ account }) => {
     const user = useSelector(state => state.user)
 
     useEffect(() => {
-        axios.post('http://localhost:3001/api/v1/transaction/transactions',
-            { accountId: account._id },
-            {
-                headers: {
-                    contentType: 'application/json',
-                    'Authorization': `Bearer ${user.token}`
+        (async () => {
+            const res = await axios.post('http://localhost:3001/api/v1/transaction/transactions',
+                { accountId: account._id },
+                {
+                    headers: {
+                        contentType: 'application/json',
+                        'Authorization': `Bearer ${user.token}`
+                    }
                 }
-            }
-        ).then((res) => {
+            )
             setTransactions(res.data.body)
-        })
+        })()
     }, [account, user.token])
 
     const showTransactions = (e) => {
         e.preventDefault()
         setIsTransaction(!isTransaction)
     }
+
+    const updateTransactions = async (data) => {
+        const res = await axios.patch(`http://localhost:3001/api/v1/transaction/update`, data,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`
+                }
+            })
+        setTransactions((prevState) => prevState.map((transaction) => {
+            if (transaction._id === res.data.body._id) {
+                return res.data.body
+            }
+            return transaction
+        }))
+        return res
+    }
+
 
 
     return (
@@ -60,7 +79,7 @@ const AccountItem = ({ account }) => {
                         {
                             transactions.map((transaction, index) => {
                                 return (
-                                    <TransactionItem key={index} transaction={transaction} />
+                                    <TransactionItem key={index} transaction={transaction} updateTransactions={updateTransactions} />
                                 )
                             })
                         }

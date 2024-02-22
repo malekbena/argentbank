@@ -21,8 +21,6 @@ const accountSchema = new mongoose.Schema(
             required: true,
             get: v => Math.round(v * 100) / 100,
             set: v => Math.round(v * 100) / 100
-
-
         },
         description: {
             type: String,

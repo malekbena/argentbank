@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown, faPencil, faCheck, faXmark } from '@fortawesome/free-solid-svg-icons'
-import axios from 'axios'
 import { useSelector } from 'react-redux'
 import { formatDate, formatAmount } from '../utils'
 
-const TransactionItem = ({ transaction }) => {
+const TransactionItem = ({ transaction, updateTransactions }) => {
     const [isDetail, setIsDetail] = useState(false)
     const [editNote, setEditNote] = useState(false)
     const [editCategory, setEditCategory] = useState(false)
@@ -14,7 +13,6 @@ const TransactionItem = ({ transaction }) => {
     const [message, setMessage] = useState('')
 
     const categories = ['Food', 'Transport', 'Shopping', 'Bills', 'Others']
-    const user = useSelector(state => state.user)
 
     useEffect(() => {
         if (message !== '') {
@@ -24,15 +22,13 @@ const TransactionItem = ({ transaction }) => {
         }
     }, [message])
 
-    const showDetail = (e) => {
-        e.preventDefault()
+    const showDetail = () => {
         setIsDetail(!isDetail)
     }
     const handleChange = (e, setState) => {
         setState(e.target.value)
     }
-    const closeForm = (e, setState) => {
-        e.preventDefault()
+    const closeForm = (setState) => {
         setState(false)
         setCategory(transaction.category)
         setNote(transaction.note)
@@ -52,7 +48,7 @@ const TransactionItem = ({ transaction }) => {
                 transactionId: transaction._id,
                 category: category
             }
-            sendRequest(e, data)
+            sendRequest(data)
         }
         if (data === note) {
             let data = {
@@ -61,41 +57,29 @@ const TransactionItem = ({ transaction }) => {
                 transactionId: transaction._id,
                 note: note
             }
-            sendRequest(e, data)
+            sendRequest(data)
         }
     }
 
-    const sendRequest = (e, data) => {
-        e.preventDefault()
+    const sendRequest = async (data) => {
         let modifiedField = data.category ? 'category' : 'note'
-
-        axios.patch(`http://localhost:3001/api/v1/transaction/update`, data,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${user.token}`
-                }
-            }
-        ).then((res) => {
-            if (res.status === 200) {
-                if (modifiedField === 'category') {
-                    transaction.category = category
-                    setEditCategory(false)
-                    setMessage('Catégorie modifiée avec succès')
-                } else {
-                    transaction.note = note
-                    setEditNote(false)
-                    setMessage('Note modifiée avec succès')
-                }
+        const res = await updateTransactions(data)
+        if (res.status === 200) {
+            if (modifiedField === 'category') {
+                setEditCategory(false)
+                setMessage('Catégorie modifiée avec succès')
             } else {
-                setMessage('Erreur lors de la modification de la transaction')
-                if (modifiedField === 'category') {
-                    closeForm(e, setEditCategory)
-                }else{
-                    closeForm(e, setEditNote)
-                }
+                setEditNote(false)
+                setMessage('Note modifiée avec succès')
             }
-        })
+        } else {
+            setMessage('Erreur lors de la modification de la transaction')
+            if (modifiedField === 'category') {
+                closeForm(setEditCategory)
+            } else {
+                closeForm(setEditNote)
+            }
+        }
     }
 
     return (
@@ -105,7 +89,7 @@ const TransactionItem = ({ transaction }) => {
                 <p>{transaction.description}</p>
                 <p>{formatAmount(transaction.amount)}</p>
                 <p>{formatAmount(transaction.accountBalance)}</p>
-                <button className='transaction-open-icon' onClick={e => showDetail(e)}>
+                <button className='transaction-open-icon' onClick={() => showDetail()}>
                     <FontAwesomeIcon icon={faChevronDown} />
                 </button>
             </div>
@@ -134,14 +118,14 @@ const TransactionItem = ({ transaction }) => {
                                     <button className='transaction-icon' onClick={e => send(e, category)}>
                                         <FontAwesomeIcon icon={faCheck} />
                                     </button>
-                                    <button className='transaction-icon' onClick={e => closeForm(e, setEditCategory)}>
+                                    <button className='transaction-icon' onClick={() => closeForm(setEditCategory)}>
                                         <FontAwesomeIcon icon={faXmark} />
                                     </button>
                                 </>
                             ) : (
                                 <>
                                     <p>{transaction.category}</p>
-                                    <button className='transaction-icon' onClick={e => setEditCategory(true)}>
+                                    <button className='transaction-icon' onClick={() => setEditCategory(true)}>
                                         <FontAwesomeIcon icon={faPencil} />
                                     </button>
                                 </>
@@ -157,14 +141,14 @@ const TransactionItem = ({ transaction }) => {
                                     <button className='transaction-icon' onClick={e => send(e, note)}>
                                         <FontAwesomeIcon icon={faCheck} />
                                     </button>
-                                    <button className='transaction-icon' onClick={e => closeForm(e, setEditNote)}>
+                                    <button className='transaction-icon' onClick={e => closeForm(setEditNote)}>
                                         <FontAwesomeIcon icon={faXmark} />
                                     </button>
                                 </>
                             ) : (
                                 <>
                                     <p>{transaction.note}</p>
-                                    <button className='transaction-icon' onClick={e => setEditNote(true)}>
+                                    <button className='transaction-icon' onClick={() => setEditNote(true)}>
                                         <FontAwesomeIcon icon={faPencil} />
                                     </button>
                                 </>
