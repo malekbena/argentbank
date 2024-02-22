@@ -26,6 +26,11 @@ const accountSchema = new mongoose.Schema(
             type: String,
             enum: ['Available Balance', 'Current Balance'],
             required: true
+        },
+        accountNumber: {
+            type: Number,
+            required: true,
+            unique: true
         }
     }
 )
