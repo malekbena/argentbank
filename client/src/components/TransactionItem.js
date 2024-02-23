@@ -86,7 +86,7 @@ const TransactionItem = ({ transaction, updateTransactions }) => {
             <div className='transaction__header grid-template'>
                 <p>{formatDate(transaction.createdAt)}</p>
                 <p>{transaction.description}</p>
-                <p>{formatAmount(transaction.amount)}</p>
+                <p className='transaction__amount'>{transaction.operation === 'Expense' ? '-' : '+'} {formatAmount(transaction.amount)}</p>
                 <p>{formatAmount(transaction.accountBalance)}</p>
                 <button className='transaction-open-icon' onClick={() => showDetail()}>
                     <FontAwesomeIcon icon={faChevronDown} />

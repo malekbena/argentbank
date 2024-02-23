@@ -300,6 +300,9 @@
   font-size: 1.5rem;
   font-weight: bold;
 }
+.transaction__amount::first-letter {
+  font-size: 1.2rem;
+}
 
 .transaction-open-icon {
   display: flex;
