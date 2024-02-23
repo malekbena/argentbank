@@ -54,7 +54,9 @@ const AccountItem = ({ account }) => {
         <section className="account">
             <div className='account-card-header'>
                 <div className="account-content-wrapper">
-                    <h3 className="account-title"> {`Argent Bank ${account.accountType}`} </h3>
+                    <h3 className="account-title">
+                        {`Argent Bank ${account.accountType}`} {`(${account.accountNumber})`}
+                    </h3>
                     <p className="account-amount"> {formatAmount(account.balance)} </p>
                     <p className="account-amount-description"> {account.description} </p>
                 </div>
