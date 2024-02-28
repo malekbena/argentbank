@@ -3,7 +3,7 @@ const dotEnv = require('dotenv')
 const cors = require('cors')
 const swaggerUi = require('swagger-ui-express')
 const yaml = require('yamljs')
-const swaggerDocs = yaml.load(__dirname+'./swagger.yaml')
+const swaggerDocs = yaml.load(__dirname+'/swagger.yaml')
 const dbConnection = require('./server/database/connection')
 
 dotEnv.config()
