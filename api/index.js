@@ -23,6 +23,9 @@ app.use(cors({
   credentials: true,
 }))
 
+// API Documentation
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
+
 // Request payload middleware
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -31,11 +34,6 @@ app.use(express.urlencoded({ extended: true }))
 app.use('/api/v1/user', require('./server/routes/userRoutes'))
 app.use('/api/v1/account', require('./server/routes/accountRoutes'))
 app.use('/api/v1/transaction', require('./server/routes/transactionRoutes'))
-
-// API Documentation
-app.use('/api-docs', swaggerUi.serve);
-
-app.get('/api-docs', swaggerUi.setup(swaggerDocs))
 
 app.get('/', (req, res, next) => {
   res.send('Hello from my Express server v2!')
