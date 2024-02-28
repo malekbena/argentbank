@@ -19,7 +19,7 @@
     "yamljs": "^0.3.0"
   },
   "scripts": {
-    "dev:server": "nodemon index.js",
+    "dev": "nodemon index.js",
     "server": "node index.js"
   },
   "devDependencies": {
