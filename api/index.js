@@ -3,7 +3,7 @@ const dotEnv = require('dotenv')
 const cors = require('cors')
 const swaggerUi = require('swagger-ui-express')
 const yaml = require('yamljs')
-const swaggerDocs = yaml.load('./server/swagger.yaml')
+const swaggerDocs = yaml.load(__dirname+'./swagger.yaml')
 const dbConnection = require('./server/database/connection')
 
 dotEnv.config()
@@ -32,9 +32,7 @@ app.use('/api/v1/account', require('./server/routes/accountRoutes'))
 app.use('/api/v1/transaction', require('./server/routes/transactionRoutes'))
 
 // API Documentation
-if (process.env.NODE_ENV !== 'production') {
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
-}
 
 app.get('/', (req, res, next) => {
   res.send('Hello from my Express server v2!')
