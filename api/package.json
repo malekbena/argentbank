@@ -2,11 +2,11 @@
   "name": "argent-bank-api",
   "version": "0.0.1",
   "private": true,
-  "description": "Project #10 - Argent Bank",
+  "description": "Argent Bank",
   "keywords": [],
   "author": "",
   "license": "",
-  "main": "index.js",
+  "main": "./server/server.js",
   "dependencies": {
     "axios": "^0.19.2",
     "bcrypt": "^5.0.0",
