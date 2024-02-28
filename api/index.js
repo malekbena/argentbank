@@ -33,7 +33,9 @@ app.use('/api/v1/account', require('./server/routes/accountRoutes'))
 app.use('/api/v1/transaction', require('./server/routes/transactionRoutes'))
 
 // API Documentation
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
+app.use('/api-docs', swaggerUi.serve);
+
+app.get('/api-docs', swaggerUi.setup(swaggerDocs))
 
 app.get('/', (req, res, next) => {
   res.send('Hello from my Express server v2!')
