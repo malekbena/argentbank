@@ -4,7 +4,7 @@ const cors = require('cors')
 const swaggerUi = require('swagger-ui-express')
 const yaml = require('yamljs')
 const swaggerDocs = yaml.load('./swagger.yaml')
-const dbConnection = require('./database/connection')
+const dbConnection = require('./server/database/connection')
 
 dotEnv.config()
 
@@ -27,9 +27,9 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 // Handle custom routes
-app.use('/api/v1/user', require('./routes/userRoutes'))
-app.use('/api/v1/account', require('./routes/accountRoutes'))
-app.use('/api/v1/transaction', require('./routes/transactionRoutes'))
+app.use('/api/v1/user', require('./server/routes/userRoutes'))
+app.use('/api/v1/account', require('./server/routes/accountRoutes'))
+app.use('/api/v1/transaction', require('./server/routes/transactionRoutes'))
 
 // API Documentation
 if (process.env.NODE_ENV !== 'production') {
