@@ -24,7 +24,9 @@ app.use(cors({
 }))
 
 // API Documentation
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
+if (process.env.NODE_ENV !== 'production') {
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
+}
 
 // Request payload middleware
 app.use(express.json())
