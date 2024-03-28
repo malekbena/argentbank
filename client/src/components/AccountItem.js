@@ -19,7 +19,7 @@ const AccountItem = ({ account }) => {
                 {
                     headers: {
                         'Authorization': `Bearer ${user.token}`,
-                        'contentType': 'application/json'
+                        'Content-Type': 'application/json'
                     }
                 }
                 )
@@ -36,8 +36,8 @@ const AccountItem = ({ account }) => {
         const res = await axios.patch(`${api}/api/v1/transaction/update`, data,
             {
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${user.token}`
+                    'Authorization': `Bearer ${user.token}`,
+                    'Content-Type': 'application/json'
                 }
             })
         setTransactions((prevState) => prevState.map((transaction) => {
