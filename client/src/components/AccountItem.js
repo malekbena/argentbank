@@ -10,21 +10,22 @@ const AccountItem = ({ account }) => {
     const [transactions, setTransactions] = useState([])
     const [isTransaction, setIsTransaction] = useState(false)
     const user = useSelector(state => state.user)
+    const api = process.env.REACT_APP_API_URL
 
     useEffect(() => {
         (async () => {
-            const res = await axios.post('http://localhost:3001/api/v1/transaction/transactions',
+            const res = await axios.post(`${api}/api/v1/transaction/transactions`,
                 { accountId: account._id },
                 {
                     headers: {
-                        contentType: 'application/json',
-                        'Authorization': `Bearer ${user.token}`
+                        'Authorization': `Bearer ${user.token}`,
+                        'contentType': 'application/json'
                     }
                 }
-            )
+                )
             setTransactions(res.data.body)
         })()
-    }, [account, user.token])
+    }, [account, user.token, api])
 
     const showTransactions = (e) => {
         e.preventDefault()
@@ -32,7 +33,7 @@ const AccountItem = ({ account }) => {
     }
 
     const updateTransactions = async (data) => {
-        const res = await axios.patch(`http://localhost:3001/api/v1/transaction/update`, data,
+        const res = await axios.patch(`${api}/api/v1/transaction/update`, data,
             {
                 headers: {
                     'Content-Type': 'application/json',

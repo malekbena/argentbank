@@ -2,12 +2,15 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Axios from "axios";
 import { checkToken } from "../utils";
 
+const api = process.env.REACT_APP_API_URL
+
 export const getProfile = createAsyncThunk(
     'user/getProfile',
     async (token) => {
-        const response = await Axios.post('http://localhost:3001/api/v1/user/profile', {}, {
+        const response = await Axios.post(`${api}/api/v1/user/profile`, {}, {
             headers: {
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`,
+                "Content-Type": 'application/json'
             }
         })
         return response.data.body
@@ -18,7 +21,7 @@ export const getProfile = createAsyncThunk(
 export const userLogin = createAsyncThunk(
     'user/userLogin',
     async (user) => {
-        const response = await Axios.post('http://localhost:3001/api/v1/user/login', user, {
+        const response = await Axios.post(`${api}/api/v1/user/login`, user, {
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -31,11 +34,10 @@ export const userEdit = createAsyncThunk(
     'user/userEdit',
     async (userName) => {
         const token = localStorage.getItem('token')
-        const response = await Axios.put('http://localhost:3001/api/v1/user/profile', userName, {
+        const response = await Axios.put(`${api}/api/v1/user/profile`, userName, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
-
             }
         })
         return response.data.body
@@ -45,9 +47,10 @@ export const userEdit = createAsyncThunk(
 export const getAccounts = createAsyncThunk(
     'user/getAccounts',
     async (token) => {
-        const response = await Axios.post('http://localhost:3001/api/v1/account/accounts', {}, {
+        const response = await Axios.post(`${api}/api/v1/account/accounts`, {}, {
             headers: {
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`,
+                "Content-Type": 'application/json'
             }
         })
         return response.data.body
@@ -72,7 +75,7 @@ const userSlice = createSlice({
             state.accounts = []
             localStorage.removeItem('token')
         }
-        
+
     }, extraReducers(builder) {
         builder.addCase(userLogin.fulfilled, (state, action) => {
             state.isLogged = true
